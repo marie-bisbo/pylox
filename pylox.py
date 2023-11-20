@@ -2,6 +2,8 @@ import sys
 import cmd
 from typing import IO
 
+had_error = False
+
 class Prompt(cmd.Cmd):
     prompt = "> "
 
@@ -26,16 +28,25 @@ def main() -> None:
     else:
         run_prompt()
 
+def run_file(path: str) -> None:
+    if had_error:
+        sys.exit(65)
+
 def run(line: str) -> None:
     for word in line.split():
         print(word)
 
-def run_file(path: str) -> None:
-    pass
-
 def run_prompt() -> None:
+    had_error = False
     prompt = Prompt()
     prompt.cmdloop("Starting prompt...")
+
+def error(line: int, message: str) -> None:
+    report(line, "", message)
+
+def report(line: int, where: str, message: str) -> None:
+    print(f"[line {line}] Error {where} : {message}")
+    had_error = True
 
 if __name__ == "__main__":
     main()
