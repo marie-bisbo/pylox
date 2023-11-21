@@ -72,9 +72,23 @@ class Scanner:
                 pass
             case '\n':
                 self.line += 1
+            case '"':
+                self.string()
             case _:
                 pass
                 # error(self.line, "Unexpected character")
+
+    def string(self) -> None:
+        while self.peek() != '"' and not self.is_at_end():
+            if self.peek() == '\n':
+                self.line += 1
+            self.advance()
+        if self.is_at_end():
+            print("Unterminated string")
+            return
+        self.advance()
+        value: str = self.source[self.start + 1: self.current - 1]
+        self.add_token_with_literal(TokenType.STRING, value)
 
     def match(self, expected: chr) -> bool:
         if self.is_at_end():

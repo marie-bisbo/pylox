@@ -35,8 +35,6 @@ def run_file(path: str) -> None:
 def run(line: str) -> None:
     scanner = Scanner(line)
     scanner.scan_tokens()
-    # for word in line.split():
-    #    print(word)
 
 def run_prompt() -> None:
     had_error = False
