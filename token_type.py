@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class TokenType(Enum):
     # Single-character tokens
     LEFT_PAREN = 1
@@ -11,12 +12,12 @@ class TokenType(Enum):
     MINUS = 7
     PLUS = 8
     SEMICOLON = 9
-    SLASH = 10,
+    SLASH = (10,)
     STAR = 11
 
     # One or two character tokens
     BANG = 12
-    BANG_EQUAL = 13 
+    BANG_EQUAL = 13
     EQUAL = 14
     EQUAL_EQUAL = 15
     GREATER = 16
@@ -38,7 +39,7 @@ class TokenType(Enum):
     FOR = 28
     IF = 29
     NIL = 30
-    OR = 31,
+    OR = (31,)
     PRINT = 32
     RETURN = 33
     SUPER = 34
@@ -48,6 +49,7 @@ class TokenType(Enum):
     WHILE = 38
 
     EOF = 39
+
 
 keywords = {
     "and": TokenType.AND,
@@ -67,5 +69,3 @@ keywords = {
     "var": TokenType.VAR,
     "while": TokenType.WHILE,
 }
-
-
