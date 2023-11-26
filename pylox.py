@@ -41,6 +41,7 @@ def main() -> None:
             )
     print(AstPrinter().print_ast(expression))
 
+
 def run_file(path: str) -> None:
     if had_error:
         sys.exit(65)

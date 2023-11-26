@@ -81,6 +81,7 @@ class Scanner:
                     self.identifier()
                 else:
                     pass
+                    # This is commented out because it leads to circular imports
                     # error(self.line, "Unexpected character")
 
     def string(self) -> None:
