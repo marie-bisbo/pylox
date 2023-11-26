@@ -9,23 +9,23 @@ from lox_token import Token
 
 class Visitor(ABC):
     @abstractmethod
-    def visit_binary_expression(expression: Binary) -> Any:
+    def visit_binary_expression(self, expression: Binary) -> Any:
         pass
 
     @abstractmethod
-    def visit_grouping_expression(expression: Grouping) -> Any:
+    def visit_grouping_expression(self, expression: Grouping) -> Any:
         pass
 
     @abstractmethod
-    def visit_literal_expression(expression: Grouping) -> Any:
+    def visit_literal_expression(self, expression: Literal) -> Any:
         pass
 
     @abstractmethod
-    def visit_unary_expression(expression: Grouping) -> Any:
+    def visit_unary_expression(self, expression: Unary) -> Any:
         pass
 
     def parenthesize(self, name: str, *expressions: Expression) -> str:
-        expression_string: str = " ".join(
+        expression_string = " ".join(
             expression.accept(self) for expression in expressions
         )
 
@@ -54,7 +54,7 @@ class AstPrinter(Visitor):
 @dataclass
 class Expression(ABC):
     @abstractmethod
-    def accept(cls, visitor: Visitor) -> None:
+    def accept(cls, visitor: Visitor) -> Any:
         pass
 
 

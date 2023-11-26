@@ -25,7 +25,7 @@ class Scanner:
         return self.tokens
 
     def scan_token(self):
-        c: chr = self.advance()
+        c: str = self.advance()
         match c:
             case "(":
                 self.add_token(TokenType.LEFT_PAREN)
@@ -117,7 +117,7 @@ class Scanner:
         token_type: TokenType = keywords.get(text, TokenType.IDENTIFIER)
         self.add_token(token_type)
 
-    def match(self, expected: chr) -> bool:
+    def match(self, expected: str) -> bool:
         if self.is_at_end():
             return False
         if self.source[self.current] != expected:
@@ -126,30 +126,30 @@ class Scanner:
         self.current += 1
         return True
 
-    def peek(self) -> chr:
+    def peek(self) -> str:
         if self.is_at_end():
             return "\0"
 
         return self.source[self.current]
 
-    def peek_next(self) -> chr:
+    def peek_next(self) -> str:
         if self.current + 1 >= len(self.source):
             return "\0"
         return self.source[self.current + 1]
 
-    def is_digit(self, c: chr) -> bool:
+    def is_digit(self, c: str) -> bool:
         return c >= "0" and c <= "9"
 
-    def is_alpha(self, c: chr) -> bool:
+    def is_alpha(self, c: str) -> bool:
         return (c >= "a" and c <= "z") or (c >= "A" and c <= "Z") or (c == "_")
 
-    def is_alphanumeric(self, c: chr) -> bool:
+    def is_alphanumeric(self, c: str) -> bool:
         return self.is_digit(c) or self.is_alpha(c)
 
     def is_at_end(self) -> bool:
         return self.current >= len(self.source)
 
-    def advance(self) -> chr:
+    def advance(self) -> str:
         current_char = self.source[self.current]
         self.current += 1
         return current_char
