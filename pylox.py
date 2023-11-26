@@ -1,6 +1,9 @@
 import sys
 import cmd
 from scanner import Scanner
+from expression import *
+from token_type import TokenType
+from lox_token import Token
 
 had_error = False
 
@@ -20,13 +23,24 @@ class Prompt(cmd.Cmd):
         return True
 
 def main() -> None:
-    num_arguments = len(sys.argv) - 1
-    if num_arguments > 1:
-        sys.exit(64)
-    elif num_arguments == 1:
-        run_file(sys.argv[0])
-    else:
-        run_prompt()
+    #num_arguments = len(sys.argv) - 1
+    #if num_arguments > 1:
+    #    sys.exit(64)
+    #elif num_arguments == 1:
+    #    run_file(sys.argv[0])
+    #else:
+    #    run_prompt()
+    expression = Binary(
+        Unary(
+            Token(
+                TokenType.MINUS, "-", None, 1),
+                Literal(123)),
+                Token(TokenType.STAR, "*", None, 1),
+                Grouping(Literal(45.67)
+                )
+            )
+    print(AstPrinter().print_ast(expression))
+
 
 def run_file(path: str) -> None:
     if had_error:
