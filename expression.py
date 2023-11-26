@@ -4,6 +4,7 @@ from lox_token import Token
 from abc import ABC, abstractmethod
 from typing import Any
 
+
 class Visitor(ABC):
     @abstractmethod
     def visit_binary_expression(expression: Binary) -> Any:
@@ -22,16 +23,21 @@ class Visitor(ABC):
         pass
 
     def parenthesize(self, name: str, *expressions: Expression) -> str:
-        expression_string: str = " ".join(expression.accept(self) for expression in expressions)
+        expression_string: str = " ".join(
+            expression.accept(self) for expression in expressions
+        )
 
         return f"({name} {expression_string})"
+
 
 class AstPrinter(Visitor):
     def print_ast(self, expression: Expression) -> str:
         return expression.accept(self)
 
     def visit_binary_expression(self, expression: Binary) -> str:
-        return self.parenthesize(expression.operator.lexeme, expression.left, expression.right)
+        return self.parenthesize(
+            expression.operator.lexeme, expression.left, expression.right
+        )
 
     def visit_grouping_expression(self, expression: Grouping) -> str:
         return self.parenthesize("group", expression.expression)
@@ -42,11 +48,13 @@ class AstPrinter(Visitor):
     def visit_unary_expression(self, expression: Unary) -> str:
         return self.parenthesize(expression.operator.lexeme, expression.right)
 
+
 @dataclass
 class Expression(ABC):
     @abstractmethod
     def accept(cls, visitor: Visitor) -> None:
         pass
+
 
 @dataclass
 class Binary(Expression):
@@ -56,7 +64,7 @@ class Binary(Expression):
 
     def accept(cls, visitor: Visitor) -> None:
         return visitor.visit_binary_expression(cls)
-        
+
 
 @dataclass
 class Grouping(Expression):
@@ -65,12 +73,14 @@ class Grouping(Expression):
     def accept(cls, visitor: Visitor) -> None:
         return visitor.visit_grouping_expression(cls)
 
+
 @dataclass
 class Literal(Expression):
     value: object
 
     def accept(cls, visitor: Visitor) -> None:
         return visitor.visit_literal_expression(cls)
+
 
 @dataclass
 class Unary(Expression):
