@@ -1,5 +1,5 @@
+from expression import Binary, Expression, Grouping, Literal, Unary
 from lox_token import Token
-from expression import Expression, Binary, Grouping, Literal, Unary
 from token_type import TokenType
 
 
