@@ -1,6 +1,6 @@
 name: GitHub Actions Linting
 run-name: Running linter and tests 🚀
-on: [push, pull_request]
+on: [pull_request]
 jobs:
   Run-Linter:
     runs-on: ubuntu-latest
