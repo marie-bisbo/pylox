@@ -1,7 +1,7 @@
 import cmd
 import sys
 
-from expression import *
+from expression import AstPrinter, Binary, Grouping, Literal, Unary
 from lox_token import Token
 from scanner import Scanner
 from token_type import TokenType
@@ -52,7 +52,7 @@ def run(line: str) -> None:
 
 
 def run_prompt() -> None:
-    had_error = False
+    # had_error = False
     prompt = Prompt()
     prompt.cmdloop("Starting prompt...")
 
@@ -63,7 +63,7 @@ def error(line: int, message: str) -> None:
 
 def report(line: int, where: str, message: str) -> None:
     print(f"[line {line}] Error {where} : {message}")
-    had_error = True
+    # had_error = True
 
 
 if __name__ == "__main__":

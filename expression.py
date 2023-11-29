@@ -45,7 +45,7 @@ class AstPrinter(Visitor):
         return self.parenthesize("group", expression.expression)
 
     def visit_literal_expression(self, expression: Literal) -> str:
-        return "nil" if expression.value == None else str(expression.value)
+        return "nil" if expression.value is None else str(expression.value)
 
     def visit_unary_expression(self, expression: Unary) -> str:
         return self.parenthesize(expression.operator.lexeme, expression.right)
