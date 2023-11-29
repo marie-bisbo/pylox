@@ -1,29 +1,31 @@
 from __future__ import annotations
-from dataclasses import dataclass
-from lox_token import Token
+
 from abc import ABC, abstractmethod
+from dataclasses import dataclass
 from typing import Any
+
+from lox_token import Token
 
 
 class Visitor(ABC):
     @abstractmethod
-    def visit_binary_expression(expression: Binary) -> Any:
+    def visit_binary_expression(self, expression: Binary) -> Any:
         pass
 
     @abstractmethod
-    def visit_grouping_expression(expression: Grouping) -> Any:
+    def visit_grouping_expression(self, expression: Grouping) -> Any:
         pass
 
     @abstractmethod
-    def visit_literal_expression(expression: Grouping) -> Any:
+    def visit_literal_expression(self, expression: Literal) -> Any:
         pass
 
     @abstractmethod
-    def visit_unary_expression(expression: Grouping) -> Any:
+    def visit_unary_expression(self, expression: Unary) -> Any:
         pass
 
     def parenthesize(self, name: str, *expressions: Expression) -> str:
-        expression_string: str = " ".join(
+        expression_string = " ".join(
             expression.accept(self) for expression in expressions
         )
 
@@ -43,7 +45,7 @@ class AstPrinter(Visitor):
         return self.parenthesize("group", expression.expression)
 
     def visit_literal_expression(self, expression: Literal) -> str:
-        return "nil" if expression.value == None else str(expression.value)
+        return "nil" if expression.value is None else str(expression.value)
 
     def visit_unary_expression(self, expression: Unary) -> str:
         return self.parenthesize(expression.operator.lexeme, expression.right)
@@ -52,7 +54,7 @@ class AstPrinter(Visitor):
 @dataclass
 class Expression(ABC):
     @abstractmethod
-    def accept(cls, visitor: Visitor) -> None:
+    def accept(cls, visitor: Visitor) -> Any:
         pass
 
 

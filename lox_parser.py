@@ -1,6 +1,7 @@
 from lox_token import Token
-from expression import *
+from expression import Expression, Binary, Grouping, Literal, Unary
 from token_type import TokenType
+
 
 class Parser:
     tokens: list[Token]
@@ -13,23 +14,104 @@ class Parser:
         return self.equality()
 
     def equality(self) -> Expression:
-        pass
+        expression = self.comparison()
+
+        while self.match(TokenType.BANG_EQUAL, TokenType.EQUAL_EQUAL):
+            operator = self.previous()
+            right = self.comparison()
+            expression = Binary(expression, operator, right)
+
+        return expression
+
+    def comparison(self) -> Expression:
+        expression = self.term()
+
+        while self.match(
+            TokenType.GREATER,
+            TokenType.GREATER_EQUAL,
+            TokenType.LESS,
+            TokenType.LESS_EQUAL,
+        ):
+            operator = self.previous()
+            right = self.term()
+            expression = Binary(expression, operator, right)
+
+        return expression
+
+    def term(self) -> Expression:
+        expression = self.factor()
+
+        while self.match(TokenType.MINUS, TokenType.PLUS):
+            operator = self.previous()
+            right = self.factor()
+            expression = Binary(expression, operator, right)
+
+        return expression
+
+    def factor(self) -> Expression:
+        expression = self.unary()
+
+        while self.match(TokenType.SLASH, TokenType.STAR):
+            operator = self.previous()
+            right = self.unary()
+            expression = Binary(expression, operator, right)
+
+        return expression
+
+    def unary(self) -> Expression:
+        if self.match(TokenType.BANG, TokenType.MINUS):
+            operator = self.previous()
+            right = self.unary()
+            return Unary(operator, right)
+
+        return self.primary()
+
+    def primary(self) -> Expression:
+        if self.match(TokenType.FALSE):
+            return Literal(False)
+        if self.match(TokenType.TRUE):
+            return Literal(True)
+        if self.match(TokenType.NIL):
+            return Literal(None)
+
+        if self.match(TokenType.NUMBER, TokenType.STRING):
+            return Literal(self.previous().literal)
+
+        if self.match(TokenType.LEFT_PAREN):
+            expression = self.expression()
+            self.consume(TokenType.RIGHT_PAREN, "Expect ')' after expression")
+            return Grouping(expression)
 
     def match(self, *types: TokenType) -> bool:
         for type in types:
-            pass
+            if self.check(type):
+                self.advance()
+                return True
 
-    def check(self) -> bool:
-        pass
+        return False
+
+    def consume(self, token_type: TokenType, message: str) -> TokenType:
+        if self.check(token_type):
+            return self.advance()
+        # TODO: Make this a proper error
+        raise ValueError
+
+    def check(self, token_type: TokenType) -> bool:
+        if self.is_at_end():
+            return False
+        return self.peek().token_type == token_type
 
     def advance(self) -> Token:
-        pass
+        if not self.is_at_end():
+            self.current += 1
+
+        return self.previous()
 
     def is_at_end(self) -> bool:
-        pass
+        return self.peek().token_type == TokenType.EOF
 
     def peek(self) -> Token:
-        pass
+        return self.tokens[self.current]
 
     def previous(self) -> Token:
-        pass
+        return self.tokens[self.current - 1]
