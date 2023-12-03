@@ -90,7 +90,7 @@ class Parser:
 
         return False
 
-    def consume(self, token_type: TokenType, message: str) -> TokenType:
+    def consume(self, token_type: TokenType, message: str) -> Token:
         if self.check(token_type):
             return self.advance()
         # TODO: Make this a proper error
